@@ -78,28 +78,28 @@ import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
         <div class="filter-section">
           <mat-chip-set>
-            <mat-chip 
-              [selected]="selectedPlatform() === 'all'"
+            <mat-chip
+              [class.active-chip]="selectedPlatform() === 'all'"
               (click)="selectPlatform('all')">
               All Platforms
               <span class="chip-count">207</span>
             </mat-chip>
-            <mat-chip 
-              [selected]="selectedPlatform() === 'google'"
+            <mat-chip
+              [class.active-chip]="selectedPlatform() === 'google'"
               (click)="selectPlatform('google')">
               <img src="/assets/google-icon.svg" alt="Google" class="platform-icon">
               Google Ads
               <span class="chip-count">77</span>
             </mat-chip>
-            <mat-chip 
-              [selected]="selectedPlatform() === 'meta'"
+            <mat-chip
+              [class.active-chip]="selectedPlatform() === 'meta'"
               (click)="selectPlatform('meta')">
               <img src="/assets/meta-icon.svg" alt="Meta" class="platform-icon">
               Meta / Facebook
               <span class="chip-count">74</span>
             </mat-chip>
-            <mat-chip 
-              [selected]="selectedPlatform() === 'shopify'"
+            <mat-chip
+              [class.active-chip]="selectedPlatform() === 'shopify'"
               (click)="selectPlatform('shopify')">
               <img src="/assets/shopify-icon.svg" alt="Shopify" class="platform-icon">
               Shopify

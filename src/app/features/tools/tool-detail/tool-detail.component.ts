@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,7 @@ import { ApiService } from '../../../core/services/api.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
+    RouterLink,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -82,7 +83,7 @@ import { ApiService } from '../../../core/services/api.service';
                     <input 
                       matInput 
                       [formControlName]="field.name"
-                      [placeholder]="field.placeholder">
+                      [placeholder]="field.placeholder || ''">
                     <mat-error *ngIf="toolForm.get(field.name)?.hasError('required')">
                       {{ field.label }} is required
                     </mat-error>
@@ -97,7 +98,7 @@ import { ApiService } from '../../../core/services/api.service';
                     <textarea 
                       matInput 
                       [formControlName]="field.name"
-                      [placeholder]="field.placeholder"
+                      [placeholder]="field.placeholder || ''"
                       rows="4">
                     </textarea>
                     <mat-error *ngIf="toolForm.get(field.name)?.hasError('required')">
@@ -130,7 +131,7 @@ import { ApiService } from '../../../core/services/api.service';
                       matInput 
                       type="number"
                       [formControlName]="field.name"
-                      [placeholder]="field.placeholder">
+                      [placeholder]="field.placeholder || ''">
                     <mat-error *ngIf="toolForm.get(field.name)?.hasError('required')">
                       {{ field.label }} is required
                     </mat-error>
