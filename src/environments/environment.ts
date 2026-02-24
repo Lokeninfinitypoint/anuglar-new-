@@ -1,8 +1,9 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api/v1',
-  authUrl: 'http://localhost:3000/auth',
-  wsUrl: 'ws://localhost:3000',
+  appwriteUrl: 'http://31.220.107.19/v1', // Appwrite on VPS 1
+  appwriteProjectId: 'marketing-platform',
+  windmillApiUrl: 'http://localhost:8000/api', // Windmill local
+  supabaseUrl: 'http://localhost:8100', // Supabase API local
   tenantId: 'dev-tenant',
   features: {
     analytics: true,
@@ -12,8 +13,8 @@ export const environment = {
     aiAssistant: false
   },
   auth: {
-    tokenKey: 'mkt_access_token',
-    refreshTokenKey: 'mkt_refresh_token',
+    sessionKey: 'appwrite_session',
+    jwtKey: 'windmill_jwt',
     tokenExpiry: 900, // 15 minutes
     refreshExpiry: 604800 // 7 days
   },

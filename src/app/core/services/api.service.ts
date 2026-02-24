@@ -12,6 +12,12 @@ export interface ApiResponse<T> {
   };
 }
 
+export interface WindmillResponse<T> {
+  result: T;
+  error?: string;
+  success: boolean;
+}
+
 export interface QueryParams {
   page?: number;
   limit?: number;
@@ -26,30 +32,47 @@ export interface QueryParams {
 })
 export class ApiService {
   private http = inject(HttpClient);
-  private baseUrl = environment.apiUrl;
+  private windmillUrl = environment.windmillApiUrl;
 
-  get<T>(endpoint: string, params?: QueryParams): Observable<ApiResponse<T>> {
+  // Windmill API endpoints - these will execute scripts that query Supabase
+  get<T>(endpoint: string, params?: QueryParams): Observable<WindmillResponse<T>> {
     const httpParams = this.buildParams(params);
-    return this.http.get<ApiResponse<T>>(`${this.baseUrl}${endpoint}`, { params: httpParams });
+    return this.http.get<WindmillResponse<T>>(`${this.windmillUrl}/w/marketing/${endpoint}`, { params: httpParams });
   }
 
-  post<T>(endpoint: string, data: any): Observable<ApiResponse<T>> {
-    return this.http.post<ApiResponse<T>>(`${this.baseUrl}${endpoint}`, data);
+  post<T>(endpoint: string, data: any): Observable<WindmillResponse<T>> {
+    return this.http.post<WindmillResponse<T>>(`${this.windmillUrl}/w/marketing/${endpoint}`, data);
   }
 
-  put<T>(endpoint: string, data: any): Observable<ApiResponse<T>> {
-    return this.http.put<ApiResponse<T>>(`${this.baseUrl}${endpoint}`, data);
+  put<T>(endpoint: string, data: any): Observable<WindmillResponse<T>> {
+    return this.http.put<WindmillResponse<T>>(`${this.windmillUrl}/w/marketing/${endpoint}`, data);
   }
 
-  patch<T>(endpoint: string, data: any): Observable<ApiResponse<T>> {
-    return this.http.patch<ApiResponse<T>>(`${this.baseUrl}${endpoint}`, data);
+  patch<T>(endpoint: string, data: any): Observable<WindmillResponse<T>> {
+    return this.http.patch<WindmillResponse<T>>(`${this.windmillUrl}/w/marketing/${endpoint}`, data);
   }
 
-  delete<T>(endpoint: string): Observable<ApiResponse<T>> {
-    return this.http.delete<ApiResponse<T>>(`${this.baseUrl}${endpoint}`);
+  delete<T>(endpoint: string): Observable<WindmillResponse<T>> {
+    return this.http.delete<WindmillResponse<T>>(`${this.windmillUrl}/w/marketing/${endpoint}`);
   }
 
-  upload<T>(endpoint: string, file: File, additionalData?: any): Observable<ApiResponse<T>> {
+  // Execute a Windmill script directly
+  executeScript<T>(scriptPath: string, args: Record<string, any>): Observable<WindmillResponse<T>> {
+    return this.http.post<WindmillResponse<T>>(
+      `${this.windmillUrl}/w/marketing/jobs/run/p/${scriptPath}`,
+      args
+    );
+  }
+
+  // Execute a Windmill flow
+  executeFlow<T>(flowPath: string, args: Record<string, any>): Observable<WindmillResponse<T>> {
+    return this.http.post<WindmillResponse<T>>(
+      `${this.windmillUrl}/w/marketing/jobs/run/f/${flowPath}`,
+      args
+    );
+  }
+
+  upload<T>(endpoint: string, file: File, additionalData?: any): Observable<WindmillResponse<T>> {
     const formData = new FormData();
     formData.append('file', file);
     
@@ -59,7 +82,7 @@ export class ApiService {
       });
     }
 
-    return this.http.post<ApiResponse<T>>(`${this.baseUrl}${endpoint}`, formData);
+    return this.http.post<WindmillResponse<T>>(`${this.windmillUrl}/w/marketing/${endpoint}`, formData);
   }
 
   private buildParams(params?: QueryParams): HttpParams {

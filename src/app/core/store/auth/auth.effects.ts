@@ -18,7 +18,7 @@ export class AuthEffects {
       exhaustMap(({ credentials }) =>
         this.authService.login(credentials).pipe(
           map(response => AuthActions.loginSuccess({ user: response.user })),
-          catchError(error => of(AuthActions.loginFailure({ error: error.message })))
+          catchError(error => of(AuthActions.loginFailure({ error: error.error?.message || error.message })))
         )
       )
     )
@@ -34,6 +34,25 @@ export class AuthEffects {
   logout$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.logout),
+      tap(() => this.authService.logout())
+    ), { dispatch: false }
+  );
+
+  refreshToken$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.refreshToken),
+      exhaustMap(() =>
+        this.authService.refreshSession().pipe(
+          map(() => AuthActions.refreshTokenSuccess()),
+          catchError(() => of(AuthActions.refreshTokenFailure()))
+        )
+      )
+    )
+  );
+
+  refreshTokenFailure$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.refreshTokenFailure),
       tap(() => this.authService.logout())
     ), { dispatch: false }
   );
