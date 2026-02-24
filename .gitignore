@@ -43,3 +43,10 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 .aider*
+
+.playwright-mcp/
+dashboard-*.png
+*-reference.png
+my-app-current.png
+server-app.png
+stripe-reference.png
